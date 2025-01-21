@@ -1,1 +1,252 @@
+{% if collection.metafields.custom.custom_faqs.value %}
+  <h2 class="faqs-heading">
+    Frequently {{ collection.title | split: ' ' | slice: 0, 2 | join: ' ' }} Furniture Questions
+  </h2>
+  <div id="faqs-container" class="faqs-section"></div>
+  <script>
+    var metafieldData = {{ collection.metafields.custom.custom_faqs.value | json }};
+  </script>
+{% else %}
+  <div id="faqs-container" class="faqs-section">
+    <p>No FAQs available for this collection.</p>
+  </div>
+{% endif %}
+
+<!-- FAQs Static section -->
+
+<div class="st-faqs-content container">
+  <p>For additional details on the offers on this page, <a href="">click here</a> to learn more.</p>
+
+  <div class="topmrg">
+    <strong>0% interest until January 2030^° – In-Store Only</strong>
+    <p class="nopd">No interest for 60 Months^° – In-Store Only</p>
+
+    <p>
+      On in-store purchases made with your Ashley Advantage® Synchrony credit card at participating locations. 60 equal
+      monthly payments required. Down payment up to 30%, plus tax and delivery may be required on another payment type
+      for in-store purchases. Promo fee of 2% of amount financed will be included in monthly payments.
+    </p>
+
+    <p>
+      ^°Not combinable with other offers and discounts. Qualifying purchase amount is determined prior to any down
+      payment, taxes or delivery. See a sales associate for details on required down payment. Qualifying purchase
+      amount, less any applicable down payment, must be on one receipt. No minimum purchase required. A promo fee, equal
+      to 2% of the amount financed at time of purchase, will be shown as a separate transaction on your billing
+      statement and included in the balance subject to this promo. Any taxes, delivery, or other charges included in the
+      amount financed will increase the related promo fee and the required monthly payments. For example, a $950
+      purchases with $50 in taxes and shipping costs, will be charged a promo fee equal to $20 and $1,020 will be
+      charged to your account. No interest will be charged on amount financed (including related promo fee) and equal
+      monthly payments are required on promo purchase amount until it is paid in full. The payments equal the initial
+      amount financed, (including related promo fee) divided by the number of months in the promo period, rounded up to
+      the next whole dollar. Any estimated monthly payments may be shown as rounded up to the next whole dollar (for
+      ease of display) or may be shown rounded up to the next cent. See your billing statement for your actual required
+      equal monthly payment, which will be rounded up to the next cent. During the last month(s) of the promo period the
+      required monthly payment may be reduced due to the prior months’ rounding. Any estimated required monthly payments
+      shown (which may exclude taxes and delivery) in connection with this promotional offer should allow you to pay off
+      the amount financed within the promo period if (1) you make your payments by the due date each month and (2) this
+      is the only balance on your account during the promo period. If you have other balances on your account, this
+      monthly payment will be added to the minimum payment applicable to those balances. Regular account terms apply to
+      non-promo purchases. For New Accounts: As of 7/16/2024: Purchase APR is 34.99%. Penalty APR is 39.99%. Minimum
+      interest charge is $2. Subject to credit approval.
+    </p>
+  </div>
+
+  <div class="topmrg">
+    <strong>36 Months Special Financing‡†</strong>
+    <p class="nopd">9.99% APR for 36 Months‡†</p>
+    <p class="nopd">
+      On online purchases of $1999 or more made with your Ashley Advantage® Synchrony credit card. Fixed monthly
+      payments required for 36 months.
+    </p>
+    <p>
+      ‡†Qualifying purchase amount must be on one receipt. Interest will be charged on the promo purchase from the
+      purchase date at a reduced 9.99% APR, and fixed monthly payments are required until paid in full. These payments
+      are equal to 3.2262% of initial total promo purchase amount, rounded up to the next whole dollar. These payments
+      may be higher than the payments that would be required if this purchase was a non-promo purchase. During the last
+      month(s) of the promo period the required monthly payment may be reduced due to the prior months' rounding.
+      Regular account terms apply to non-promo purchases. New Accounts as of 07/16/24: Purchase APR 34.99%. Penalty APR
+      39.99%. Min Interest Charge $2. A promo fee will be charged equal to 2% of the amount financed on an equal payment
+      no interest promotion of 18 months or more. Subject to credit approval. See store for details.
+    </p>
+  </div>
+
+  <div class="topmrg">
+    <strong>$1 to Start‡^</strong>
+    <p class="nopd">
+      ‡^ “$1 to start” is available for applications online and in select stores, does not include taxes and refers to
+      the rental period from agreement start date to first scheduled renewal payment. On your first renewal date, lease
+      payment amounts, taxes, and fees will apply. Lease renewal payment amount, period to ownership, and total cost
+      vary by item selected. This is not a promotion for a specific transaction or item. Please see lease for payment
+      amounts and rental terms. Offer will not reduce the number of payments, total amount necessary to acquire
+      ownership, or purchase option amount. Customers in California will pay a $0 initial rent payment and a $1
+      processing fee to start.
+    </p>
+  </div>
+
+  <div class="topmrg">
+    <strong>Shop without using credit5 </strong>
+    <p class="nopd">
+      5Acima offers lease-to-own transactions. “Shop Without Using Credit” means this is not a loan, credit, or
+      financing. Acima obtains information from consumer reporting agencies during a lease application. We consider
+      multiple data points and regularly approve customers with less than perfect credit history. Acima Cash Price may
+      include a markup over invoice price. Acquiring ownership by leasing costs more than the retailer’s cash price. Not
+      available in MN, NJ, WI, or WY. Not all applicants are approved.
+    </p>
+  </div>
+</div>
+
+<style>
+  .faqs-heading{
+    text-align:center;
+        border-top: 2px solid #ccc;
+        padding: 50px 0px 0px;
+    margin:50px auto;
+  }
+  .faqs-section {
+    width:80%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin: 20px auto;
+    padding: 20px 0;
+
+  }
+
+  .faq-column {
+    flex: 1 1 calc(50% - 20px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .faq-column h2 {
+    margin-bottom: 0;
+    font-size: 16px;
+  }
+
+  .faq-column p {
+    margin: 0;
+    line-height: 1.6;
+    font-size: 14px;
+  }
+
+  .faq-column ul {
+    padding: 0;
+    margin-left: 20px;
+  }
+
+  .faq-column ul li {
+    line-height: 25px;
+  }
+
+  .faq-column a {
+    color: #E69138;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  /**Faqs Static section**/
+     .st-faqs-content.container{
+       padding:0px;
+           width: 80%;
+    margin: auto;
+     }
+       .st-faqs-content{
+           padding: 10px 0px;
+     }
+     .st-faqs-content p{
+       padding:10px 0px;
+     }
+     .st-faqs-content .nopd{
+       padding:0px!important;
+     }
+    .st-faqs-content .topmrg{
+       margin: 20px 0;
+     }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    if (typeof metafieldData !== "undefined") {
+      const container = document.getElementById("faqs-container");
+      const columns = [document.createElement("div"), document.createElement("div")];
+
+      columns[0].className = "faq-column";
+      columns[1].className = "faq-column";
+
+      let currentColumn = 0;
+      let tempGroup = [];
+      let headingCounter = 1; // Counter for heading numbers
+
+      metafieldData.children.forEach((block) => {
+        if (block.type === "heading" && tempGroup.length > 0) {
+          appendGroupToColumn(tempGroup, columns[currentColumn]);
+          tempGroup = [];
+          currentColumn = currentColumn === 0 ? 1 : 0;
+        }
+        tempGroup.push(block);
+      });
+
+      if (tempGroup.length > 0) {
+        appendGroupToColumn(tempGroup, columns[currentColumn]);
+      }
+
+      columns.forEach((col) => container.appendChild(col));
+
+      function appendGroupToColumn(group, column) {
+        group.forEach((block) => {
+          const item = document.createElement("div");
+          item.className = "faq-item";
+
+          switch (block.type) {
+            case "heading":
+              item.innerHTML = `<h2>${headingCounter}. ${extractText(block.children)}</h2>`;
+              headingCounter++; // Increment the counter for each heading
+              break;
+            case "paragraph":
+              item.innerHTML = `<p>${extractText(block.children)}</p>`;
+              break;
+            case "list":
+              const items = block.children
+                .map((item) => `<li>${extractText(item.children)}</li>`)
+                .join("");
+              item.innerHTML = `<ul>${items}</ul>`;
+              break;
+            case "link":
+              item.innerHTML = `<a href="${block.url}" target="_blank">${extractText(
+                block.children
+              )}</a>`;
+              break;
+            default:
+              item.innerHTML = extractText(block.children);
+          }
+
+          column.appendChild(item);
+        });
+      }
+
+      function extractText(children) {
+        if (!children || !Array.isArray(children)) return "";
+
+        return children
+          .map((child) => {
+            if (child.type === "text") {
+              return child.value || "";
+            } else if (child.type === "link") {
+              const linkText = child.children
+                ? child.children.map((linkChild) => linkChild.value || "").join("")
+                : "";
+              const linkUrl = child.url || "#";
+              const previewListener = child.previewlistener
+                ? ` previewlistener="${child.previewlistener}"`
+                : "";
+              return `<a href="${linkUrl}" target="_blank"${previewListener}> ${linkText} </a>`;
+            }
+            return "";
+          })
+          .join("");
+      }
+    }
+  });
+</script>
 
