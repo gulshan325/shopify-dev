@@ -1,0 +1,111 @@
+<!--Store Location Display Frontend-->
+
+<div class="store-details">
+        <p>See this item at</p>
+        <select id="location-dropdown">
+          <option value="">Select a Pickup Location</option>
+        </select>
+      <div id="location-details"></div>
+      </div>
+	  
+<!--Store Location Style-->
+
+<style>
+  #location-dropdown {
+  font-weight: 700;
+  color: #000;
+  width: 100%;
+  max-width: 368px;
+  font-size: 16px;
+  line-height: 1.4;
+  border: none;
+  white-space: normal; /* Allow text wrapping */
+  word-wrap: break-word; /* Wrap long words */
+  overflow-wrap: break-word; 
+  appearance: none; 
+  background: url('https://cdn.shopify.com/s/files/1/0729/7466/3936/files/down.png?v=1734360638') no-repeat right 10px center;
+  background-size: 22px;
+}
+  #location-dropdown:focus {
+  outline: none;
+  border: none; 
+}
+
+#location-dropdown:valid {
+  border: none; 
+}
+ #location-details {
+    font-weight: 700;
+    color: #000;
+  }
+ </style>
+	 
+
+<!-- Fetch Store Location JavaScript -->
+
+<script>
+  const fetchLocations = async () => {
+    const response = await fetch('your-store-url/admin/api/2023-10/locations.json', {
+      method: 'GET',
+      headers: {
+        'X-Shopify-Access-Token': 'your token', // you will get it when you will creat the custom app for this  
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const locations = data.locations;
+
+      // Get the dropdown and details div elements
+      const dropdown = document.getElementById('location-dropdown');
+      const detailsDiv = document.getElementById('location-details');
+
+      // Populate the dropdown with locations
+      locations.forEach(location => {
+        const option = document.createElement('option');
+        option.value = location.id; // Use location ID or any unique identifier
+        option.textContent = `${location.name}, ${location.address1}, ${location.city}, ${location.country}`;
+        
+        // Include custom data (example: opening hours)
+        const openUntil = location.opening_hours || "Open until 7:00 PM"; // Replace with actual API field
+        option.dataset.openUntil = openUntil;
+        dropdown.appendChild(option);
+      });
+
+      // Restore the previously selected location from localStorage
+      const savedLocationId = localStorage.getItem('selectedLocation');
+      if (savedLocationId) {
+        dropdown.value = savedLocationId; // Set the dropdown to the saved location
+        const selectedOption = dropdown.options[dropdown.selectedIndex];
+        if (selectedOption) {
+          detailsDiv.textContent = selectedOption.dataset.openUntil || '';
+        }
+      }
+
+      // Add change event listener to the dropdown
+      dropdown.addEventListener('change', () => {
+        const selectedOption = dropdown.options[dropdown.selectedIndex];
+
+        if (selectedOption.value) {
+          // Save the selected location ID in localStorage
+          localStorage.setItem('selectedLocation', selectedOption.value);
+
+          // Display details in the div
+          detailsDiv.textContent = selectedOption.dataset.openUntil || 'Details not available';
+        } else {
+          // Clear details if no location is selected
+          detailsDiv.textContent = '';
+          localStorage.removeItem('selectedLocation'); // Clear saved location
+        }
+      });
+
+      console.log('Locations populated:', locations);
+    } else {
+      console.error('Error fetching locations:', response.status, response.statusText);
+    }
+  };
+
+  fetchLocations();
+</script> 
+	  
