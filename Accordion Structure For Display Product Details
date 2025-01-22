@@ -1,0 +1,211 @@
+<!-- Accordion Structure -->
+<div class="custom-accordion-container">
+  <!-- Product Description Tab -->
+  {% assign product_description = product.description | strip_html | strip %}
+  {% if product_description != "" %}
+    <div class="accordion-box">
+      <div class="accordion-item">
+        <h5>
+          <a href="#tab1" class="accordion-link" data-accordion-action>
+            Product Description <span class="plus-sign">+</span>
+          </a>
+        </h5>
+        <div id="tab1" class="accordion-content" data-accordion-target>
+          <p>{{ product.description }}</p>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Weight and Dimensions Tab -->
+  {% assign weight = product.variants.first.weight %}
+  {% assign dimension = product.metafields.Dimension.Dimension %}
+  {% if weight > 0 or dimension != blank %}
+    <div class="accordion-box">
+      <div class="accordion-item">
+        <h5>
+          <a href="#tab2" class="accordion-link" data-accordion-action>
+            Weight and Dimensions <span class="plus-sign">+</span>
+          </a>
+        </h5>
+        <div id="tab2" class="accordion-content" data-accordion-target>
+          {% if weight > 0 %}
+            <b>Weight:</b> {{ weight | weight_with_unit }}<br>
+          {% elsif dimension != blank %}
+            <b>Dimensions:</b> {{ dimension }}<br>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Specifications Tab -->
+  {% assign sku = current_variant.sku %}
+  {% assign assemblyinstruction = product.metafields.assemblyinstruction.assemblyinstruction %}
+  {% assign warranty = product.metafields.Warranty.Warranty %}
+  {% assign material = product.metafields.Material.Material %}
+  {% assign upc = product.metafields.UPC.UPC %}
+  {% assign lifestyle = product.metafields.Lifestyle.Lifestyle %}
+
+  {% if sku != blank or assemblyinstruction != blank or warranty != blank or material != blank or upc != blank or lifestyle != blank %}
+    <div class="accordion-box">
+      <div class="accordion-item">
+        <h5>
+          <a href="#tab3" class="accordion-link" data-accordion-action>
+            Specifications <span class="plus-sign">+</span>
+          </a>
+        </h5>
+        <div id="tab3" class="accordion-content" data-accordion-target>
+          {% if sku != blank %}
+            <b>Vendor Model Number:</b> {{ sku }}<br>
+          {% elsif assemblyinstruction != blank %}
+            <b>Assembly Instructions URL:</b>
+            <a href="{{ assemblyinstruction }}" target="_blank">Click Here</a><br>
+          {% elsif warranty != blank %}
+            <b>Warranty:</b> {{ warranty }} days<br>
+          {% elsif material != blank %}
+            <b>Material:</b> {{ material }}<br>
+          {% elsif upc != blank %}
+            <b>UPC:</b> {{ upc }}<br>
+          {% elsif lifestyle != blank %}
+            <b>Lifestyle:</b> {{ lifestyle }}<br>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Item Included Tab -->
+  {% assign packageItemQuantity = product.metafields.packageItemQuantity.packageItemQuantity | split: '<h3>' %}
+  {% if packageItemQuantity != blank %}
+    {% for packageItemQuantitylist in packageItemQuantity %}
+      {% unless packageItemQuantitylist == blank %}
+        {% assign packageItemQuantitylist_parts = packageItemQuantitylist | split: '</h3>' %}
+        <div class="accordion-box">
+          <div class="accordion-item">
+            <h5>
+              <a href="#tab4" class="accordion-link" data-accordion-action>
+                Item Included <span class="plus-sign">+</span>
+              </a>
+            </h5>
+            <div id="tab4" class="accordion-content" data-accordion-target>
+              {% include 'product-include-item' %}
+            </div>
+          </div>
+        </div>
+      {% endunless %}
+    {% endfor %}
+  {% endif %}
+
+  <!-- Reviews Tab -->
+  {% comment %} Assuming Reviews are added dynamically, you can conditionally check for content here {% endcomment %}
+  {% assign reviews_content = false %}
+  {% if reviews_content %}
+    <div class="accordion-box">
+      <div class="accordion-item">
+        <h5>
+          <a href="#tab5" class="accordion-link" data-accordion-action>
+            Reviews <span class="plus-sign">+</span>
+          </a>
+        </h5>
+        <div id="tab5" class="accordion-content" data-accordion-target>
+          <!-- Add Reviews Code Here -->
+          <!-- Display Reviews -->
+        <div class="product-reviews recently-viewed-reviews">
+          {% if product.reviews_count > 0 %}
+            <p class="average-rating">
+              Rating: {{ product.average_rating | round: 1 }} / 5
+            </p>
+            <p>{{ product.reviews_count }}</p>
+          {% else %}
+            <p>No reviews yet</p>
+          {% endif %}
+        </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<!-- CSS for Accordion -->
+<style>
+      .custom-accordion-container {
+        box-shadow: 0px 10px 5px #3C3C3C1A inset;
+        width: 100%;
+        margin: 20px 0 0 0;
+        padding: 20px;
+        background-color: #F2F2F2;
+        /* border-radius: 8px; */
+      }
+
+     .custom-accordion-container .accordion-box {
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        background-color: #fff;
+      }
+
+    .custom-accordion-container .accordion-item {
+        padding: 3px 10px;
+      }
+
+    .custom-accordion-container .accordion-link {
+        text-decoration: none;
+         font-family: 'Open Sans', sans-serif !important;
+        font-weight: 700;
+        line-height:15.56px;
+        font-size:14px;
+        color: #262626;
+        display: block;
+        padding: 10px 0px;
+        cursor: pointer;
+      }
+
+    .custom-accordion-container .plus-sign {
+        float: right;
+      color:#AAAAAA;
+      }
+
+    .custom-accordion-container .accordion-content {
+        display: none;
+        padding: 15px;
+        background-color: #fff;
+        border-top: 1px solid #ddd;
+          font-size: 14px;
+      text-align: justify;
+      }
+  .custom-accordion-container .accordion-content a{
+    color: #f68d2d;
+    font-weight:700;
+  }
+  .custom-accordion-container .accordion-content p {
+      margin-bottom: 1em; /* Adjust spacing as needed */
+  }
+    .custom-accordion-container .accordion-content.open {
+        display: block;
+      }
+
+      /* .accordion-link:hover {
+        background-color: #f1f1f1;
+      } */
+
+
+         @media (max-width: 368px) {
+         .custom-accordion-container{
+               width: 95%;
+        margin: 20px auto;
+         }
+</style>
+
+<!-- JavaScript for Accordion Functionality -->
+<script>
+  document.querySelectorAll('[data-accordion-action]').forEach(function (accordionLink) {
+    accordionLink.addEventListener('click', function (e) {
+      e.preventDefault();
+      var target = document.querySelector(accordionLink.getAttribute('href'));
+      target.classList.toggle('open');
+      var plusSign = accordionLink.querySelector('.plus-sign');
+      plusSign.textContent = target.classList.contains('open') ? '−' : '+';
+    });
+  });
+</script>
