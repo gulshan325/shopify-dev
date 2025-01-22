@@ -1,0 +1,60 @@
+{% if product.metafields.packageItemQuantityList.packageItemQuantityList %}
+  {% assign json_data = product.metafields.packageItemQuantityList.packageItemQuantityList %}
+
+  <!-- Display the raw JSON data in a hidden data attribute -->
+  <div id="raw-json-data" data-json="{{ json_data | escape }}"></div>
+
+  <!-- Where we will display the processed text -->
+  <div id="package-item-quantity-list">Loading...</div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      setTimeout(function() {
+        try {
+          // Get the JSON data from the hidden div's data attribute
+          const rawJsonData = document.getElementById('raw-json-data').getAttribute('data-json');
+          
+          // Parse the JSON string to an actual object
+          const jsonData = JSON.parse(rawJsonData);
+
+          // Debugging: Check the parsed data in the console
+          console.log("Parsed JSON Data: ", jsonData);
+
+          // Ensure the JSON data is an array
+          if (Array.isArray(jsonData)) {
+            // Function to convert JSON data to a human-readable format
+            function convertJsonToText(jsonData) {
+              return jsonData.map(item => {
+                let text = `SKU: ${item.sku}, Quantity: ${item.quantity}, Type: ${item.type}`;
+                
+                // If the item has "includes" (nested components), process them
+                if (item.includes && item.includes.length > 0) {
+                  text += '<br>Includes:';
+                  item.includes.forEach(component => {
+                    text += `<br>  SKU: ${component.sku}, Quantity: ${component.quantity}, Type: ${component.type}`;
+                  });
+                }
+                return text;
+              }).join('<br><br>');
+            }
+
+            // Convert the JSON data to a readable text format
+            const humanReadableText = convertJsonToText(jsonData);
+
+            // Insert the human-readable text into the page
+            const displayElement = document.getElementById("package-item-quantity-list");
+            if (displayElement) {
+              displayElement.innerHTML = humanReadableText;
+            }
+          } else {
+            console.error("Expected an array, but received:", jsonData);
+          }
+        } catch (e) {
+          console.error("Error processing JSON data:", e);
+        }
+      }, 500); // Delay execution to ensure page elements are fully loaded
+    });
+  </script>
+{% else %}
+  <p>No package data available for this product.</p>
+{% endif %}
