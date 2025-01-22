@@ -1,0 +1,135 @@
+<!-- Product Gallery Section -->
+<!-- Main Image/Video Section (Left Aligned) -->
+<div class="main-image mb-3">
+  <img
+    id="mainProductImage"
+    src="{{ product.featured_image | img_url: '1024x1024' }}"
+    alt="{{ product.title }}"
+    class="img-fluid"
+  >
+  <video id="mainProductVideo" class="img-fluid" controls style="display: none; max-width: 100%; max-height: 500px;">
+    <source id="videoSource" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
+
+<!-- Horizontal Gallery Section -->
+<div class="gallery-thumbnails d-flex align-items-start">
+  <!-- Loop through product images to display as gallery thumbnails -->
+  {% for image in product.images %}
+    <div class="thumbnail-wrapper me-2" data-color="{{ image.color }}">
+      <img
+        src="{{ image | img_url: 'small' }}"
+        alt="{{ product.title }}"
+        class="img-thumbnail gallery-image"
+        onclick="changeMainImage('{{ image | img_url: '1024x1024' }}', this)"
+      >
+    </div>
+  {% endfor %}
+
+  <!-- Video Thumbnail -->
+  {% assign video = product.media | where: 'media_type', 'video' | first %}
+  {% if video %}
+    <div class="thumbnail-wrapper me-2">
+      <img
+        src="{{ video.preview_image.src | img_url: 'small' }}"
+        alt="Product Video"
+        class="img-thumbnail gallery-image"
+        onclick="showVideo('{{ video | media_url }}')"
+      >
+    </div>
+  {% endif %}
+
+  <!-- 360 View Thumbnail -->
+  <!--
+    <div class="thumbnail-wrapper">
+      <img src="your-360-thumbnail.jpg" alt="360 View" class="img-thumbnail gallery-image" onclick="show360View()">
+    </div>
+  -->
+</div>
+
+<!-- JavaScript for Dynamic Functionality -->
+<script>
+  function changeMainImage(src, thumbnailElement) {
+      // Show main image and hide video
+      document.getElementById("mainProductImage").src = src;
+      document.getElementById("mainProductImage").style.display = 'block';
+      document.getElementById("mainProductVideo").style.display = 'none';
+      document.getElementById("mainProductVideo").pause(); // Stop video if it was playing
+      resetThumbnailBorders();
+      thumbnailElement.style.border = "2px solid black"; // Highlight selected thumbnail
+  }
+
+  function showVideo(videoSrc) {
+      const videoElement = document.getElementById("mainProductVideo");
+      const imageElement = document.getElementById("mainProductImage");
+
+      // Set the video source dynamically and ensure it reloads
+      videoElement.src = videoSrc;
+      videoElement.load();  // Force reload of the video
+      videoElement.style.display = 'block';
+      videoElement.controls = true;
+      videoElement.play(); // Play the video automatically
+
+      // Hide main image and show video
+      imageElement.style.display = 'none';
+
+      resetThumbnailBorders();
+  }
+
+  function show360View() {
+      const view360Src = "path-to-your-360-view-model";
+      document.getElementById("mainProductImage").src = view360Src;
+      document.getElementById("mainProductImage").style.display = 'block';
+      document.getElementById("mainProductVideo").style.display = 'none';
+      resetThumbnailBorders();
+  }
+
+  function resetThumbnailBorders() {
+      const thumbnails = document.querySelectorAll('.gallery-image');
+      thumbnails.forEach(function(thumbnail) {
+          thumbnail.style.border = "1px solid #d3d3d3";
+      });
+  }
+</script>
+
+<!-- CSS for Custom Styling (Optional) -->
+<style>
+  .main-image img, .main-image video {
+      width: 100%;
+      max-height: 500px;
+      object-fit: cover;
+  }
+
+  .gallery-thumbnails {
+      overflow-x: auto;
+      white-space: nowrap;
+      padding-top: 10px;
+      display: flex;
+      gap: 8px;
+  }
+
+  .gallery-image {
+      cursor: pointer;
+      width: 100px;
+      height: 80px;
+      object-fit: cover;
+      padding: 4px;
+      border-radius: 3px;
+      flex: 0 0 auto;
+      border: 1px solid #d3d3d3;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+  }
+
+  .gallery-image:hover {
+      border: 2px solid #007bff;
+  }
+
+  @media (max-width: 368px) {
+     .gallery-thumbnails{
+       width: 95%;
+    margin: 0 auto;
+     }
+  }
+</style>
