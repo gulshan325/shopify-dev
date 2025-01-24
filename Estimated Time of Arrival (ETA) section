@@ -1,0 +1,71 @@
+<!-- Liquid Logic for Dynamic Date -->
+{% assign today = 'now' | date: '%s' %}
+{% assign eta_days = section.settings.eta_days %}
+{% assign eta_seconds = eta_days | times: 86400 %}
+{% assign eta_timestamp = today | plus: eta_seconds %}
+{% assign eta_date = eta_timestamp | date: '%B %d, %Y' %}
+
+<section class="eta-section" style="background-color: {{ section.settings.background_color }};">
+  <div class="container">
+    <h2 style="color: {{ section.settings.text_color }};">{{ section.settings.eta_heading }}</h2>
+    <p style="color: {{ section.settings.text_color }};">
+      Your order will arrive in <strong>{{ section.settings.eta_days }} days</strong>:
+      <strong>{{ eta_date }}</strong>
+    </p>
+  </div>
+</section>
+
+<style>
+  .eta-section {
+      padding: 20px;
+      text-align: center;
+      border: 1px solid #ddd;
+      margin: 20px 0;
+      border-radius: 5px;
+  }
+  .eta-section h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+  }
+  .eta-section p {
+      font-size: 18px;
+  }
+</style>
+
+{% schema %}
+{
+    "name": "ETA Section Format 1",
+    "settings": [
+        {
+            "type": "text",
+            "id": "eta_heading",
+            "label": "Heading",
+            "default": "Estimated Time of Arrival"
+        },
+        {
+            "type": "number",
+            "id": "eta_days",
+            "label": "Shipping Days",
+            "default": 5
+        },
+        {
+            "type": "color",
+            "id": "background_color",
+            "label": "Background Color",
+            "default": "#f9f9f9"
+        },
+        {
+            "type": "color",
+            "id": "text_color",
+            "label": "Text Color",
+            "default": "#555555"
+        }
+    ],
+    "presets": [
+        {
+            "name": "ETA Section Format 2",
+            "category": "Custom"
+        }
+    ]
+}
+{% endschema %}
