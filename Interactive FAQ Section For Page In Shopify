@@ -1,0 +1,135 @@
+{% comment %}
+  FAQ Section: Hardcoded FAQ Questions and Answers
+{% endcomment %}
+
+<div class="faq-container">
+  <h1>Frequently Asked Questions</h1>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      <h3>What is your return policy?</h3>
+    </div>
+    <div class="faq-answer">
+      <p>We accept returns within 30 days of purchase. Please visit our return page for more information.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      <h3>Do you offer international shipping?</h3>
+    </div>
+    <div class="faq-answer">
+      <p>Yes, we offer international shipping. Shipping charges and delivery times vary depending on the destination.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      <h3>How can I track my order?</h3>
+    </div>
+    <div class="faq-answer">
+      <p>You can track your order through the tracking link provided in the order confirmation email.</p>
+    </div>
+  </div>
+
+</div>
+
+{% style %}
+.faq-container {
+  padding: 40px;
+  background-color: #f0f8ff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-container h1 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 30px;
+  font-weight: bold;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.faq-item {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.faq-question {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.faq-question h3 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+}
+
+.faq-question:hover {
+  background-color: #e7f3fe;
+}
+
+.faq-answer {
+  display: none;
+  padding: 15px;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  margin-top: 10px;
+  transition: max-height 0.3s ease-out, padding 0.3s ease;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.faq-answer.open {
+  display: block;
+  max-height: 1000px; /* Large enough value to accommodate any content */
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.faq-question.active {
+  color: #007bff;
+}
+
+.faq-question.active::after {
+  content: "-"; /* Changed to minus sign */
+  font-size: 18px;
+  color: #007bff;
+  margin-left: 10px;
+}
+
+.faq-question:not(.active)::after {
+  content: "+"; /* Changed to plus sign */
+  font-size: 18px;
+  color: #555;
+  margin-left: 10px;
+}
+{% endstyle %}
+
+{% javascript %}
+  document.addEventListener('DOMContentLoaded', function () {
+  const faqItems = document.querySelectorAll('.faq-item');
+
+  faqItems.forEach(item => {
+    const question = item.querySelector('.faq-question');
+    question.addEventListener('click', function() {
+      const answer = item.querySelector('.faq-answer');
+      answer.classList.toggle('open');
+      question.classList.toggle('active');
+    });
+  });
+});
+{% endjavascript %}
