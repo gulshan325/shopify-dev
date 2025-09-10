@@ -1,0 +1,64 @@
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    fetch("/browsing_context_suggestions.json")
+      .then(response => response.json())
+      .then(data => {
+        let country = data.detected_values.country.handle;
+
+        if (country !== "MY") {
+          // Disable scrolling until popup is closed
+          document.body.style.overflow = "hidden";
+
+          // Create popup container
+          let popup = document.createElement("div");
+          popup.innerHTML = `
+            <div id="geo-popup" style="
+              position: fixed;
+              top: 0; left: 0;
+              width: 100%; height: 100%;
+              background: rgba(0,0,0,0.7);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              z-index: 999999;
+            ">
+              <div style="
+                background: #fff;
+                padding: 24px;
+                max-width: 420px;
+                text-align: center;
+                border-radius: 16px;
+                box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+                font-family: Arial, sans-serif;
+              ">
+                <h2 style="margin-bottom: 12px; font-size: 20px; font-weight: bold;">
+                  Region Notice
+                </h2>
+                <p style="font-size: 16px; margin-bottom: 20px; line-height: 1.4;">
+                  You are visiting our Malaysia store.  
+                  If you wish to continue browsing, please acknowledge.
+                </p>
+                <button id="geo-close" style="
+                  padding: 12px 24px;
+                  border: none;
+                  background: #000;
+                  color: #fff;
+                  font-size: 15px;
+                  border-radius: 8px;
+                  cursor: pointer;
+                  transition: background 0.3s;
+                ">I Understand</button>
+              </div>
+            </div>
+          `;
+          document.body.appendChild(popup);
+
+          // Enable scrolling again once acknowledged
+          document.getElementById("geo-close").addEventListener("click", function () {
+            document.getElementById("geo-popup").style.display = "none";
+            document.body.style.overflow = "auto";
+          });
+        }
+      });
+  });
+</script>
