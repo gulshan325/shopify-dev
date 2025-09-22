@@ -1,0 +1,306 @@
+<div class="container featured-diverse-slider-wrapper">
+  {% if section.settings.title != blank %}
+    <h2 class="featured-diverse-slider-title text-center mb-6">{{ section.settings.title }}</h2>
+  {% endif %}
+
+  <slider-component class="featured-diverse-slider" data-slider>
+    <div class="featured-diverse-slider-track">
+      {% for block in section.blocks %}
+        {% assign collection = collections[block.settings.collection] %}
+        {% if collection != blank %}
+          {% for product in collection.products limit: block.settings.products_limit %}
+            <div class="featured-diverse-slider-item text-center" {{ block.shopify_attributes }}>
+              <a href="{{ product.url }}">
+                <img 
+                  src="{{ product.featured_image | img_url: '400x400' }}" 
+                  alt="{{ product.title }}" 
+                  class="mx-auto mb-3"
+                />
+                <h3 class="font-bold text-lg truncate">{{ product.title }}</h3>
+                <p class="text-gray-600">{{ product.price | money }}</p>
+                <span class="shop-now inline-block mt-2 text-blue-600">Shop Now</span>
+              </a>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <!-- Slider buttons -->
+    <button type="button" class="featured-diverse-slider-button featured-diverse-slider-button--prev" aria-label="Previous">
+      {% render 'icon-arrow-left.liquid' %}
+    </button>
+    <button type="button" class="featured-diverse-slider-button featured-diverse-slider-button--next" aria-label="Next">
+     {% render 'icon-arrow-right.liquid' %}
+    </button>
+  </slider-component>
+</div>
+
+{% schema %}
+{
+  "name": "Featured Diverse Slider",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Featured Products"
+    },
+    {
+      "type": "range",
+      "id": "items_to_show",
+      "label": "Products Visible at Once",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 5
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_block",
+      "name": "Collection Block",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Select Collection"
+        },
+        {
+          "type": "range",
+          "id": "products_limit",
+          "label": "Number of Products to Show",
+          "min": 1,
+          "max": 20,
+          "step": 1,
+          "default": 10
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Diverse Slider",
+      "category": "Custom",
+      "blocks": [
+        { "type": "collection_block" },
+        { "type": "collection_block" }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .featured-diverse-slider-wrapper {
+    padding: 40px 20px;
+    {% comment %} background: #f8f8f8; {% endcomment %}
+    position: relative;
+    overflow: hidden;
+  }
+
+  .featured-diverse-slider-title {
+    font-size: 2.5rem;
+    color: #000;
+    font-weight:600;
+  }
+
+  .featured-diverse-slider {
+    position: relative;
+  }
+
+  .featured-diverse-slider-track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc(95% / {{ section.settings.items_to_show | default: 5 }});
+    gap: 15px;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  .featured-diverse-slider-item {
+    scroll-snap-align: start;
+    text-align: center;
+    border-radius: 10px;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background: #f8f8f8;
+    padding-bottom: 2rem;
+  }
+  .featured-diverse-slider-item h3{
+    font-size:1.6rem;
+    margin-bottom:10px;
+    padding: 0px 15px;
+    word-wrap: break-word; /* Legacy property for older browsers */
+    white-space: normal;
+  }
+  .featured-diverse-slider-item p{
+    font-size:1.6rem;
+  }
+  .featured-diverse-slider-item .shop-now{
+      font-size:1.6rem;
+      font-weight:500;
+  }
+
+  .featured-diverse-slider-item img {
+    border-radius: 10px;
+    margin-top: 10px;
+    width: 90%;
+    max-width: 100%;
+    height: 220px;
+    object-fit: contain;
+    mix-blend-mode: darken;
+    margin-bottom: 10px;
+  }
+
+  .featured-diverse-slider-button {
+    position: absolute;
+    top: 30%;
+    transform: translateY(-50%);
+    color: #000;
+    width: 40px;
+    height: 40px;
+    border: none;
+    cursor: pointer;
+    z-index: 5;
+  }
+
+  .featured-diverse-slider-button--prev { left: 10px; }
+  .featured-diverse-slider-button--next { right: 10px; }
+
+  /* Responsive for tablets and small devices */
+  @media (max-width: 767px) {
+    .featured-diverse-slider-title {
+      font-size: 2rem;
+    }
+
+    .featured-diverse-slider-track {
+      grid-auto-columns: calc(95% / 2); /* show 2 products */
+      gap: 10px;
+    }
+
+    .featured-diverse-slider-item {
+      min-height: 280px;
+      padding: 10px;
+    }
+
+    .featured-diverse-slider-item img {
+      height: 180px;
+    }
+
+    .featured-diverse-slider-button {
+      width: 35px;
+      height: 35px;
+      top: 40%;
+    }
+  }
+
+  /* Responsive for mobile devices */
+  @media (max-width: 480px) {
+    .featured-diverse-slider-title {
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+    }
+    .featured-diverse-slider-wrapper{
+                max-width: 100%;
+        margin: 0px 15px;
+    }
+
+    .featured-diverse-slider-track {
+      grid-auto-columns: 95%; /* show 1 product */
+      gap: 14px;
+    }
+
+    .featured-diverse-slider-item {
+      min-height: 250px;
+    }
+
+    .featured-diverse-slider-item h3 {
+      font-size: 1.4rem;
+    }
+
+    .featured-diverse-slider-item p,
+    .featured-diverse-slider-item .shop-now {
+      font-size: 1.2rem;
+    }
+
+    .featured-diverse-slider-item img {
+      height: 160px;
+      width: 100%;
+    }
+
+    .featured-diverse-slider-button {
+      width: 30px;
+      height: 30px;
+      top: 45%;
+    }
+    .featured-diverse-slider-button--next{
+        right: 25px!important;
+    }
+    .featured-diverse-slider-button--prev {
+        left: 0px!important;
+    }
+
+    .featured-diverse-slider-button--prev { left: 5px; }
+    .featured-diverse-slider-button--next { right: 5px; }
+  }
+  
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const sliderWrappers = document.querySelectorAll(".featured-diverse-slider-wrapper");
+    
+    sliderWrappers.forEach(function(sliderWrapper) {
+      const track = sliderWrapper.querySelector(".featured-diverse-slider-track");
+      const prevBtn = sliderWrapper.querySelector(".featured-diverse-slider-button--prev");
+      const nextBtn = sliderWrapper.querySelector(".featured-diverse-slider-button--next");
+      
+      if (!track || !prevBtn || !nextBtn) return;
+      
+      const item = track.querySelector(".featured-diverse-slider-item");
+      const itemWidth = item.offsetWidth + 15; // width + gap
+
+      // Function to update button visibility
+      function updateButtons() {
+        const maxScrollLeft = track.scrollWidth - track.clientWidth;
+
+        if (track.scrollLeft <= 0) {
+          prevBtn.style.display = "none";
+        } else {
+          prevBtn.style.display = "block";
+        }
+
+        if (track.scrollLeft >= maxScrollLeft - 5) { 
+          nextBtn.style.display = "none";
+        } else {
+          nextBtn.style.display = "block";
+        }
+      }
+
+      // Initial state
+      updateButtons();
+
+      prevBtn.addEventListener("click", () => {
+        track.scrollBy({ left: -itemWidth, behavior: "smooth" });
+      });
+
+      nextBtn.addEventListener("click", () => {
+        track.scrollBy({ left: itemWidth, behavior: "smooth" });
+      });
+
+      // Update buttons when scroll ends
+      track.addEventListener("scroll", () => {
+        updateButtons();
+      });
+
+      // Also update on resize (to handle responsive layouts)
+      window.addEventListener("resize", () => {
+        updateButtons();
+      });
+    });
+  });
+</script>
+
